@@ -9,7 +9,7 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack initialRouteName="(tabs)">
+      <Stack>
         {/* 🔐 Auth Screens */}
         <Stack.Screen
           name="auth/login"

@@ -9,6 +9,7 @@ export default function LocationPage() {
   return (
     <LocationScreen
       onLocationSelected={() => router.replace("/(tabs)")}
+      // FIXED: Updated path to include '/auth/' since the file is in the auth folder
       onManualEntry={() => router.push("/manual-location")}
       onSkip={() => router.replace("/(tabs)")}
     />

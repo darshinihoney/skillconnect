@@ -1,42 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, View, StyleSheet } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React from 'react';
 import { useRouter } from 'expo-router';
+// We keep the { } because HomeScreen is a named export
+import { HomeScreen } from '@/components/screens/home-screen';
 
-export default function TabsIndex() {
+export default function TabIndex() {
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    checkLoginStatus();
-  }, []);
-
-  const checkLoginStatus = async () => {
-    try {
-      const isLoggedIn = await AsyncStorage.getItem('isLoggedIn');
-
-      if (isLoggedIn === 'true') {
-        // ✅ User is logged in, go to Welcome
-        router.replace('/welcome');
-      } else {
-        // ❌ User is NOT logged in, go to Login
-        router.replace('/auth/login');
-      }
-    } catch (e) {
-      console.warn('Auth check failed', e);
-      router.replace('/auth/login');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
-    <View style={styles.center}>
-      <ActivityIndicator size="large" color="#0000ff" />
-    </View>
+    <HomeScreen
+      // 1. Navigate to the location screen we fixed earlier
+      onLocationPress={() => router.push('/location')}
+
+      // 2. Placeholder for Search (we can build this later)
+      onSearchPress={() => console.log("Search clicked")}
+
+      // 3. Placeholder for Category clicks
+      onCategoryPress={(categoryId) => console.log("Category clicked:", categoryId)}
+
+      // 4. Placeholder for Service clicks
+      onServicePress={(serviceId) => console.log("Service clicked:", serviceId)}
+    />
   );
 }
-
-const styles = StyleSheet.create({
-  center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-});
