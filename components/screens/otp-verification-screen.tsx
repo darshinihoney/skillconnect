@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react"
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, TextInput } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
-import Colors  from "@/constants/Colors"
+import {Colors}  from "@/constants/Colors"
 import { Button } from "@/components/ui/Button"
 
 interface OtpVerificationScreenProps {

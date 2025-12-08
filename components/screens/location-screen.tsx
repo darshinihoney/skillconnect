@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Animated } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
-import  Colors  from "@/constants/Colors"
+import  {Colors}  from "@/constants/Colors"
 import { Button } from "@/components/ui/Button"
 import { useAppStore } from "@/lib/store"
 

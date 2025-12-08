@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import { View, Button, TextInput, StyleSheet, Text, Alert } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
+// IMPORT STORE
+import { useAppStore } from '@/lib/store';
 
 export default function Login() {
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    // Get actions from store
+    const { setAuthenticated, setUser } = useAppStore();
 
     async function handleLogin() {
         // 🛠 Mock Validation
@@ -15,11 +19,15 @@ export default function Login() {
             return;
         }
 
-        // ✅ Save Session
-        await AsyncStorage.setItem('isLoggedIn', 'true');
-        await AsyncStorage.setItem('userEmail', email);
+        // ✅ Save Session to Store (Global State)
+        setAuthenticated(true);
+        setUser({
+            name: "Test User", // Mock name
+            email: email,
+            phone: "" // Will be filled in phone auth step
+        });
 
-        // 🔀 Redirect to Welcome
+        // 🔀 Redirect to Welcome (Next step in your flow)
         router.replace('/welcome');
     }
 
@@ -66,7 +74,7 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 20,
         justifyContent: 'center',
-        backgroundColor: '#f5f5f5', // Light background for visibility
+        backgroundColor: '#f5f5f5',
     },
     title: {
         fontSize: 28,
@@ -76,7 +84,7 @@ const styles = StyleSheet.create({
         color: '#333',
     },
     input: {
-        backgroundColor: '#fff', // White background for inputs
+        backgroundColor: '#fff',
         borderWidth: 1,
         borderColor: '#ddd',
         padding: 15,

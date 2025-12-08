@@ -1,3 +1,4 @@
+
 import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
 import AsyncStorage from "@react-native-async-storage/async-storage"
@@ -64,7 +65,8 @@ interface AppState {
   setAuthenticated: (auth: boolean) => void
   setUser: (user: AppState["user"]) => void
   setCurrentLocation: (location: AppState["currentLocation"]) => void
-  addToCart: (service: Service) => void
+  // UPDATE 1: Allow passing a specific quantity (optional, defaults to 1)
+  addToCart: (service: Service, quantity?: number) => void
   removeFromCart: (serviceId: string) => void
   updateCartItemQuantity: (serviceId: string, quantity: number) => void
   clearCart: () => void
@@ -89,17 +91,21 @@ export const useAppStore = create<AppState>()(
       setUser: (user) => set({ user }),
       setCurrentLocation: (location) => set({ currentLocation: location }),
 
-      addToCart: (service) =>
+      // UPDATE 2: Implementation handles the custom quantity
+      addToCart: (service, quantity = 1) =>
         set((state) => {
           const existing = state.cart.find((item) => item.service.id === service.id)
           if (existing) {
             return {
               cart: state.cart.map((item) =>
-                item.service.id === service.id ? { ...item, quantity: item.quantity + 1 } : item,
+                item.service.id === service.id
+                  ? { ...item, quantity: item.quantity + quantity }
+                  : item,
               ),
             }
           }
-          return { cart: [...state.cart, { service, quantity: 1 }] }
+          // If new item, use the passed quantity (or default 1)
+          return { cart: [...state.cart, { service, quantity }] }
         }),
 
       removeFromCart: (serviceId) =>

@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { View, Text, StyleSheet, SafeAreaView, KeyboardAvoidingView, Platform, TouchableOpacity } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
-import  Colors  from "@/constants/Colors"
+import  {Colors}  from "@/constants/Colors"
 import  Button from "@/components/ui/Button"
 import Input  from "@/components/ui/Input"
 

@@ -12,7 +12,7 @@ import {
   Platform,
 } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
-import  Colors from "@/constants/Colors"
+import  {Colors} from "@/constants/Colors"
 import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/Input"
 import { useAppStore } from "@/lib/store"

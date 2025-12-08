@@ -46,18 +46,13 @@
 //     mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
 //   },
 // });
-
-const Colors = {
+export const Colors = {
   primary: "#007BFF",
   primaryLight: "#46A3FF",
   primaryDark: "#0056b3",
   white: "#FFFFFF",
   black: "#000000",
-
-  // Required by WelcomeScreen
-  text: "#111827",
-  textSecondary: "#6B7280",
-
+  text: "#1A1A1A",
   gray: {
     50: "#F9FAFB",
     100: "#F3F4F6",
@@ -70,13 +65,11 @@ const Colors = {
     800: "#1F2937",
     900: "#111827",
   },
-
   success: "#10B981",
+  textSecondary: "#666666",
   warning: "#F59E0B",
   error: "#EF4444",
   background: "#FFFFFF",
   surface: "#F9FAFB",
   border: "#E5E7EB",
 }
-
-export default Colors

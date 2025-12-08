@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions } from "rea
 import { useRouter } from "expo-router"
 import { Ionicons } from "@expo/vector-icons"
 import { StatusBar } from "expo-status-bar"
-import Colors from "@/constants/Colors"
+import {Colors} from "@/constants/Colors"
 
 const { width, height } = Dimensions.get("window")
 
