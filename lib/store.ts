@@ -1,4 +1,3 @@
-
 import { create } from "zustand"
 import { createJSONStorage, persist } from "zustand/middleware"
 import AsyncStorage from "@react-native-async-storage/async-storage"
@@ -65,13 +64,17 @@ interface AppState {
   setAuthenticated: (auth: boolean) => void
   setUser: (user: AppState["user"]) => void
   setCurrentLocation: (location: AppState["currentLocation"]) => void
-  // UPDATE 1: Allow passing a specific quantity (optional, defaults to 1)
   addToCart: (service: Service, quantity?: number) => void
   removeFromCart: (serviceId: string) => void
   updateCartItemQuantity: (serviceId: string, quantity: number) => void
   clearCart: () => void
   addAddress: (address: Address) => void
   addBooking: (booking: Booking) => void
+
+  // NEW ACTIONS: Update and Cancel
+  updateBooking: (id: string, updates: Partial<Booking>) => void
+  cancelBooking: (id: string) => void
+
   getCartTotal: () => number
   getCartCount: () => number
   logout: () => void
@@ -91,7 +94,6 @@ export const useAppStore = create<AppState>()(
       setUser: (user) => set({ user }),
       setCurrentLocation: (location) => set({ currentLocation: location }),
 
-      // UPDATE 2: Implementation handles the custom quantity
       addToCart: (service, quantity = 1) =>
         set((state) => {
           const existing = state.cart.find((item) => item.service.id === service.id)
@@ -104,7 +106,6 @@ export const useAppStore = create<AppState>()(
               ),
             }
           }
-          // If new item, use the passed quantity (or default 1)
           return { cart: [...state.cart, { service, quantity }] }
         }),
 
@@ -133,6 +134,22 @@ export const useAppStore = create<AppState>()(
       addBooking: (booking) =>
         set((state) => ({
           bookings: [booking, ...state.bookings],
+        })),
+
+      // IMPLEMENTATION: Update a booking (used for Rescheduling)
+      updateBooking: (id, updates) =>
+        set((state) => ({
+          bookings: state.bookings.map((booking) =>
+            booking.id === id ? { ...booking, ...updates } : booking
+          ),
+        })),
+
+      // IMPLEMENTATION: Cancel a booking
+      cancelBooking: (id) =>
+        set((state) => ({
+          bookings: state.bookings.map((booking) =>
+            booking.id === id ? { ...booking, status: "cancelled" } : booking
+          ),
         })),
 
       getCartTotal: () => {

@@ -4,28 +4,26 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from "rea
 import { Ionicons } from "@expo/vector-icons"
 import { useAppStore } from "@/lib/store"
 import {Colors} from "@/constants/Colors"
-
+import { useRouter, Href } from "expo-router"
 interface ProfileScreenProps {
     onLogout: () => void
 }
 
 const menuItems = [
-    { id: "bookings", icon: "calendar-outline", title: "My Bookings", subtitle: "View all your bookings" },
-    { id: "addresses", icon: "location-outline", title: "Saved Addresses", subtitle: "Manage your addresses" },
-    { id: "payment", icon: "card-outline", title: "Payment Methods", subtitle: "Manage payment options" },
-    { id: "notifications", icon: "notifications-outline", title: "Notifications", subtitle: "Notification preferences" },
-    { id: "help", icon: "help-circle-outline", title: "Help & Support", subtitle: "Get help, contact us" },
-    { id: "about", icon: "information-circle-outline", title: "About", subtitle: "App version, terms, privacy" },
+    { id: "bookings", icon: "calendar-outline", title: "My Bookings", subtitle: "View all your bookings", route: "/bookings" as Href },
+    { id: "addresses", icon: "location-outline", title: "Saved Addresses", subtitle: "Manage your addresses", route: "/manual-location" as Href },
+    { id: "payment", icon: "card-outline", title: "Payment Methods", subtitle: "Manage payment options", route: "/checkout1" as Href },
+    { id: "help", icon: "help-circle-outline", title: "Help & Support", subtitle: "Get help, contact us", route: "/help" as Href },
+    { id: "about", icon: "information-circle-outline", title: "About", subtitle: "App version, terms, privacy", route: "/about" as Href },
 ]
 
 export default function ProfileScreen({ onLogout }: ProfileScreenProps) {
     const { user, isAuthenticated } = useAppStore()
+    const router = useRouter()
 
     return (
         <View style={styles.container}>
             {/* Header */}
-            
-
             <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
                 {/* Profile Card */}
                 <View style={styles.profileCard}>
@@ -88,15 +86,20 @@ export default function ProfileScreen({ onLogout }: ProfileScreenProps) {
                         <Text style={styles.statLabel}>Points</Text>
                     </View>
                 </View>
-
-                {/* Menu Items */}
                 <View style={styles.menuContainer}>
-                    {menuItems.map((item, index) => (
-                        <TouchableOpacity key={item.id} style={styles.menuItem}>
+                    {menuItems.map((item) => (
+                        <TouchableOpacity
+                            key={item.id}
+                            style={styles.menuItem}
+                            // 4. Handle navigation on click
+                            onPress={() => router.push(item.route)}
+                        >
                             <View style={styles.menuLeft}>
+                                {/* FIXED: Changed <div> to <View> */}
                                 <View style={styles.menuIcon}>
                                     <Ionicons name={item.icon as any} size={22} color={Colors.primary} />
                                 </View>
+
                                 <View>
                                     <Text style={styles.menuTitle}>{item.title}</Text>
                                     <Text style={styles.menuSubtitle}>{item.subtitle}</Text>
