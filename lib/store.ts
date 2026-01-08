@@ -59,6 +59,13 @@ interface AppState {
   savedAddresses: Address[]
   cart: CartItem[]
   bookings: Booking[]
+  activeJob: {
+    description: string;
+    budget: string;
+    status: 'finding' | 'bidding' | 'scheduled' | 'tracking';
+  } | null;
+  setActiveJob: (job: any) => void;
+  clearJob: () => void;
 
   // Actions
   setAuthenticated: (auth: boolean) => void
@@ -89,6 +96,9 @@ export const useAppStore = create<AppState>()(
       savedAddresses: [],
       cart: [],
       bookings: [],
+      activeJob: null, // Initial state is null
+      setActiveJob: (job) => set({ activeJob: job }),
+      clearJob: () => set({ activeJob: null }),
 
       setAuthenticated: (auth) => set({ isAuthenticated: auth }),
       setUser: (user) => set({ user }),
