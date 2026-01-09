@@ -1,20 +1,19 @@
-import React from "react"
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Image,
-  TouchableOpacity,
-  Dimensions,
-  Platform,
-  StatusBar,
-} from "react-native"
-import { Ionicons } from "@expo/vector-icons"
-import { useAppStore } from "@/lib/store"
-import { categories, getFeaturedServices, getPopularServices } from "@/lib/services-data"
 import { Colors } from "@/constants/Colors"
+import { categories, getFeaturedServices, getPopularServices } from "@/lib/services-data"
+import { useAppStore } from "@/lib/store"
+import { Ionicons } from "@expo/vector-icons"
 import { useRouter } from "expo-router"
+import {
+  Dimensions,
+  Image,
+  Platform,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native"
 
 const { width } = Dimensions.get("window")
 

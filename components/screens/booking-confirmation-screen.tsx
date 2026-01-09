@@ -1,8 +1,8 @@
-import { useEffect, useRef } from "react"
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Animated, Image } from "react-native"
-import { Ionicons } from "@expo/vector-icons"
-import { useAppStore } from "@/lib/store"
 import { Colors } from "@/constants/Colors"
+import { useAppStore } from "@/lib/store"
+import { Ionicons } from "@expo/vector-icons"
+import { useEffect, useRef } from "react"
+import { Animated, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 
 interface BookingConfirmationScreenProps {
     onGoHome: () => void
