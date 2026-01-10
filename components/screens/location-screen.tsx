@@ -288,6 +288,7 @@
 //     color: Colors.gray[600],
 //   },
 // })
+
 "use client"
 
 import { Button } from "@/components/ui/Button"
@@ -297,7 +298,7 @@ import { Ionicons } from "@expo/vector-icons"
 import * as Location from "expo-location"
 import { useEffect, useRef, useState } from "react"
 import { ActivityIndicator, Alert, Animated, StyleSheet, Text, TouchableOpacity, View } from "react-native"
-import { SafeAreaView } from "react-native-safe-area-context"; // Fixed Import
+import { SafeAreaView } from "react-native-safe-area-context"; 
 
 interface LocationScreenProps {
   onLocationSelected: () => void
