@@ -1,11 +1,11 @@
 "use client"
 
-import React, { useState } from "react"
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Alert, Platform } from "react-native"
-import { Ionicons } from "@expo/vector-icons"
-import { useAppStore } from "@/lib/store"
 import { Colors } from "@/constants/Colors"
+import { useAppStore } from "@/lib/store"
+import { Ionicons } from "@expo/vector-icons"
 import DateTimePicker, { DateTimePickerAndroid } from '@react-native-community/datetimepicker'
+import { useState } from "react"
+import { Alert, Image, Platform, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 
 export default function BookingsScreen() {
     const { bookings, updateBooking, cancelBooking } = useAppStore()
