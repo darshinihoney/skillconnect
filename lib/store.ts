@@ -77,7 +77,7 @@ interface AppState {
   clearCart: () => void
   addAddress: (address: Address) => void
   addBooking: (booking: Booking) => void
-
+  updateUser: (newData: Partial<NonNullable<AppState["user"]>>) => void;
   // NEW ACTIONS: Update and Cancel
   updateBooking: (id: string, updates: Partial<Booking>) => void
   cancelBooking: (id: string) => void
@@ -122,6 +122,10 @@ export const useAppStore = create<AppState>()(
       removeFromCart: (serviceId) =>
         set((state) => ({
           cart: state.cart.filter((item) => item.service.id !== serviceId),
+        })),
+      updateUser: (newData) =>
+        set((state) => ({
+          user: state.user ? { ...state.user, ...newData } : null
         })),
 
       updateCartItemQuantity: (serviceId, quantity) =>

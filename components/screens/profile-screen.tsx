@@ -3,8 +3,9 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from "react-native"
 import { Ionicons } from "@expo/vector-icons"
 import { useAppStore } from "@/lib/store"
-import {Colors} from "@/constants/Colors"
+import { Colors } from "@/constants/Colors"
 import { useRouter, Href } from "expo-router"
+
 interface ProfileScreenProps {
     onLogout: () => void
 }
@@ -18,13 +19,15 @@ const menuItems = [
 ]
 
 export default function ProfileScreen({ onLogout }: ProfileScreenProps) {
+    // We pull 'user' and 'isAuthenticated' from the global store.
+    // When the store updates (from Edit Profile), this component re-renders automatically.
     const { user, isAuthenticated } = useAppStore()
     const router = useRouter()
 
     return (
         <View style={styles.container}>
-            {/* Header */}
             <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+
                 {/* Profile Card */}
                 <View style={styles.profileCard}>
                     <View style={styles.profileImageContainer}>
@@ -44,10 +47,19 @@ export default function ProfileScreen({ onLogout }: ProfileScreenProps) {
                             <Ionicons name="camera" size={16} color={Colors.white} />
                         </TouchableOpacity>
                     </View>
-                    <Text style={styles.profileName}>{isAuthenticated ? "John Doe" : "Guest User"}</Text>
-                    <Text style={styles.profilePhone}>{user?.phone || "+1 (555) 123-4567"}</Text>
 
-                    <TouchableOpacity style={styles.editProfileButton}>
+                    {/* DYNAMIC DATA: These fields now listen to the store */}
+                    <Text style={styles.profileName}>
+                        {isAuthenticated ? (user?.name || "John Doe") : "Guest User"}
+                    </Text>
+                    <Text style={styles.profilePhone}>
+                        {user?.phone || "+1 (555) 123-4567"}
+                    </Text>
+
+                    <TouchableOpacity
+                        style={styles.editProfileButton}
+                        onPress={() => router.push("/edit-profile" as Href)}
+                    >
                         <Ionicons name="create-outline" size={18} color={Colors.primary} />
                         <Text style={styles.editProfileText}>Edit Profile</Text>
                     </TouchableOpacity>
@@ -64,7 +76,10 @@ export default function ProfileScreen({ onLogout }: ProfileScreenProps) {
                             <Text style={styles.membershipSubtitle}>Get exclusive benefits</Text>
                         </View>
                     </View>
-                    <TouchableOpacity style={styles.upgradeButton}>
+                    <TouchableOpacity
+                        style={styles.upgradeButton}
+                        onPress={() => router.push('/service-upgrade' as any)}
+                    >
                         <Text style={styles.upgradeText}>Upgrade</Text>
                     </TouchableOpacity>
                 </View>
@@ -86,20 +101,19 @@ export default function ProfileScreen({ onLogout }: ProfileScreenProps) {
                         <Text style={styles.statLabel}>Points</Text>
                     </View>
                 </View>
+
+                {/* Menu Items */}
                 <View style={styles.menuContainer}>
                     {menuItems.map((item) => (
                         <TouchableOpacity
                             key={item.id}
                             style={styles.menuItem}
-                            // 4. Handle navigation on click
                             onPress={() => router.push(item.route)}
                         >
                             <View style={styles.menuLeft}>
-                                {/* FIXED: Changed <div> to <View> */}
                                 <View style={styles.menuIcon}>
                                     <Ionicons name={item.icon as any} size={22} color={Colors.primary} />
                                 </View>
-
                                 <View>
                                     <Text style={styles.menuTitle}>{item.title}</Text>
                                     <Text style={styles.menuSubtitle}>{item.subtitle}</Text>
@@ -129,19 +143,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: Colors.background,
-    },
-    header: {
-        paddingHorizontal: 20,
-        paddingTop: 50,
-        paddingBottom: 16,
-        backgroundColor: Colors.white,
-        borderBottomWidth: 1,
-        borderBottomColor: Colors.border,
-    },
-    headerTitle: {
-        fontSize: 24,
-        fontWeight: "700",
-        color: Colors.text,
     },
     content: {
         flex: 1,
@@ -262,6 +263,7 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         padding: 20,
         marginBottom: 16,
+        marginTop: 10,
     },
     statItem: {
         flex: 1,
