@@ -73,7 +73,6 @@ export default function Login() {
           name: data.user.name,
           email: data.user.email,
           phone: data.user.phone || "",
-          role: data.user.role,
         });
         router.replace("/welcome");
       } else {

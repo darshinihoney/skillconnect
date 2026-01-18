@@ -2,21 +2,24 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
-    ActivityIndicator,
-    Alert,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    StatusBar,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 // --- Configuration ---
 const API_URL = process.env.EXPO_PUBLIC_API_URL;
+
+// --- Types ---
+type Role = "client" | "worker";
 
 const colors = {
   background: "#F0F4F8",
@@ -30,10 +33,11 @@ const colors = {
 
 export default function Signup() {
   const router = useRouter();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("client");
+  const [role, setRole] = useState<Role>("client");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -70,16 +74,19 @@ export default function Signup() {
         body: JSON.stringify({
           name: name.trim(),
           email: email.toLowerCase().trim(),
-          password: password,
-          role: role,
+          password,
+          role,
         }),
       });
 
       const data = await response.json();
 
       if (response.ok) {
-        Alert.alert("Account Created", `Success! You signed up as a ${role}.`, [
-          { text: "Go to Login", onPress: () => router.replace("/auth/login") },
+        Alert.alert("Account Created", `Signed up as ${role}`, [
+          {
+            text: "Go to Login",
+            onPress: () => router.replace("/auth/login"),
+          },
         ]);
       } else {
         Alert.alert("Signup Failed", data.msg || "Something went wrong.");
@@ -87,50 +94,12 @@ export default function Signup() {
     } catch (error) {
       Alert.alert(
         "Network Error",
-        "Cannot connect to server. Ensure iPhone and Computer are on the same Wi-Fi.",
+        "Cannot connect to server. Ensure phone and computer are on same Wi-Fi.",
       );
     } finally {
       setLoading(false);
     }
   }
-
-  interface RoleButtonProps {
-    selectedRole: string;
-    roleName: string;
-    icon: keyof typeof Ionicons.glyphMap;
-    onPress: () => void;
-  }
-
-  const RoleButton: React.FC<RoleButtonProps> = ({
-    selectedRole,
-    roleName,
-    icon,
-    onPress,
-  }) => (
-    <TouchableOpacity
-      style={[
-        styles.roleButton,
-        selectedRole === roleName && styles.roleButtonSelected,
-      ]}
-      onPress={onPress}
-      activeOpacity={0.8}
-      disabled={loading}
-    >
-      <Ionicons
-        name={icon}
-        size={22}
-        color={selectedRole === roleName ? colors.cardBg : colors.primaryBlue}
-      />
-      <Text
-        style={[
-          styles.roleButtonText,
-          selectedRole === roleName && styles.roleButtonTextSelected,
-        ]}
-      >
-        {roleName.charAt(0).toUpperCase() + roleName.slice(1)}
-      </Text>
-    </TouchableOpacity>
-  );
 
   return (
     <KeyboardAvoidingView
@@ -138,11 +107,13 @@ export default function Signup() {
       style={styles.container}
     >
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
+
       <View style={styles.contentContainer}>
         <ScrollView
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
         >
+          {/* ---------- HEADER ---------- */}
           <View style={styles.header}>
             <View style={styles.logoContainer}>
               <Ionicons
@@ -155,23 +126,8 @@ export default function Signup() {
             <Text style={styles.subtitle}>Join us and find your fit</Text>
           </View>
 
+          {/* ---------- CARD ---------- */}
           <View style={styles.card}>
-            <Text style={styles.inputLabel}>I am signing up as a...</Text>
-            <View style={styles.roleSelectorContainer}>
-              <RoleButton
-                selectedRole={role}
-                roleName="client"
-                icon="briefcase-outline"
-                onPress={() => setRole("client")}
-              />
-              <RoleButton
-                selectedRole={role}
-                roleName="worker"
-                icon="hammer-outline"
-                onPress={() => setRole("worker")}
-              />
-            </View>
-
             <Text style={styles.inputLabel}>Full Name</Text>
             <View style={styles.inputContainer}>
               <Ionicons
@@ -224,7 +180,9 @@ export default function Signup() {
                 secureTextEntry={!showPassword}
                 editable={!loading}
               />
-              <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+              <TouchableOpacity
+                onPress={() => setShowPassword(!showPassword)}
+              >
                 <Ionicons
                   name={showPassword ? "eye-outline" : "eye-off-outline"}
                   size={22}
@@ -246,6 +204,7 @@ export default function Signup() {
             </TouchableOpacity>
           </View>
 
+          {/* ---------- FOOTER ---------- */}
           <View style={styles.footer}>
             <Text style={styles.footerText}>Already have an account?</Text>
             <TouchableOpacity onPress={() => router.back()}>
@@ -258,6 +217,7 @@ export default function Signup() {
   );
 }
 
+// ---------- STYLES ----------
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
   contentContainer: { flex: 1 },
@@ -296,35 +256,7 @@ const styles = StyleSheet.create({
     height: 55,
   },
   inputIcon: { marginRight: 12 },
-  input: { flex: 1, fontSize: 16, color: colors.darkText, height: "100%" },
-  roleSelectorContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 25,
-    gap: 10,
-  },
-  roleButton: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 15,
-    borderRadius: 12,
-    borderWidth: 1.5,
-    borderColor: colors.inputBorder,
-    backgroundColor: colors.cardBg,
-  },
-  roleButtonSelected: {
-    backgroundColor: colors.primaryBlue,
-    borderColor: colors.primaryBlue,
-  },
-  roleButtonText: {
-    marginLeft: 8,
-    color: colors.primaryBlue,
-    fontWeight: "600",
-    fontSize: 15,
-  },
-  roleButtonTextSelected: { color: colors.cardBg },
+  input: { flex: 1, fontSize: 16, color: colors.darkText },
   primaryButton: {
     backgroundColor: colors.primaryBlue,
     borderRadius: 12,
